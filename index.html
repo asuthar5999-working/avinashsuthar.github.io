@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=1440">
+<meta name="HandheldFriendly" content="false">
 <title>Avinash Suthar — Video Editor &amp; Sound Designer</title>
 <meta name="description" content="Avinash Suthar — video editor, sound designer and mix engineer. Shorts, long-form, and sound design for Netflix, Prime Video, Disney+ Hotstar, ZEE5 and more.">
 <meta property="og:title" content="Avinash Suthar — Video Editor &amp; Sound Designer">
@@ -62,7 +63,7 @@ a:focus-visible,button:focus-visible{outline:2px solid #0E2A47;outline-offset:3p
 .lf .lfplay{transition:transform .35s, background .35s}
 .lf:hover .lfplay{transform:scale(1.1)}
 @media (prefers-reduced-motion: reduce){.blink,.cloud,.cloud2,.wb,.bob,.playhead,.scan{animation:none}}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 @media (max-width: 1180px){.hx{display:none !important}}
 .belt1 a[aria-label], .belt2 a[aria-label]{will-change:transform}
 .cloud, .cloud2{will-change:transform, translate}
@@ -1412,6 +1413,20 @@ Worked with directors and crew on 15+ ad films.</div>
       if (a === 'beltNext') st.n1 += 246; else if (a === 'beltPrev') st.n1 -= 246;
       else if (a === 'belt2Next') st.n2 += 400; else if (a === 'belt2Prev') st.n2 -= 400;
     });
+  });
+
+  document.querySelectorAll('[data-on-mouseenter]').forEach(function (el) {
+    var two = el.getAttribute('data-on-mouseenter') === 'pause2On';
+    var sx = 0, lx = 0, moved = false, down = false;
+    el.addEventListener('touchstart', function (e) { down = true; moved = false; sx = lx = e.touches[0].clientX; if (two) st.p2 = true; else st.p1 = true; }, { passive: true });
+    el.addEventListener('touchmove', function (e) {
+      if (!down) return; var x = e.touches[0].clientX, dx = x - lx; lx = x;
+      if (Math.abs(x - sx) > 8) moved = true;
+      var scale = 1440 / (window.visualViewport ? window.visualViewport.width * (window.visualViewport.scale || 1) : 1440);
+      if (two) st.o2 -= dx * 1.4; else st.o1 -= dx * 1.4;
+    }, { passive: true });
+    el.addEventListener('touchend', function () { down = false; setTimeout(function () { if (two) st.p2 = false; else st.p1 = false; }, 1200); });
+    el.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
   });
 
   var base = "background: none; border: none; padding: 0 0.02em; cursor: pointer; font-family: 'Instrument Serif', serif; font-size: clamp(90px, 17vw, 260px); line-height: 1; ";
